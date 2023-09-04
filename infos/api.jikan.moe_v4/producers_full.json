@@ -1,0 +1,40 @@
+{
+    "data": {
+        "mal_id": 1,
+        "url": "https://myanimelist.net/anime/producer/1/Pierrot",
+        "titles": [{
+            "type": "Japanese",
+            "title": "ぴえろ"
+        }],
+        "images": {
+            "jpg": {
+                "image_url": "https://cdn.myanimelist.net/s/common/company_logos/b03509d0-0a9f-4f7e-a75f-6ad2649f4cdc_600x600_i?s=668dd24cfe04283101aba66102a2c2c5"
+            }
+        },
+        "favorites": 4261,
+        "established": "1979-05-01T00:00:00+00:00",
+        "about": "Pierrot ぴえろ (Pierrot Co., Ltd.) is a Japanese animation studio established in May 1979 by former employees of both Tatsunoko Production and Mushi Production. Its headquarters are located in Mitaka, Tokyo. Pierrot is renowned for several worldwide popular anime series, such as Naruto, Bleach, Yu Yu Hakusho, Black Clover, Boruto: Naruto Next Generations, Tokyo Ghoul, and Great Teacher Onizuka.",
+        "count": 302,
+        "external": [{
+                "name": "pierrot.jp",
+                "url": "http://pierrot.jp/\r"
+            },
+            {
+                "name": "en.pierrot.jp",
+                "url": "https://en.pierrot.jp/\r"
+            },
+            {
+                "name": "@studiopierrot_",
+                "url": "https://twitter.com/studiopierrot\r"
+            },
+            {
+                "name": "Facebook",
+                "url": "https://www.facebook.com/studiopierrot\r"
+            },
+            {
+                "name": "YouTube",
+                "url": "https://www.youtube.com/channel/UC0U2GG9WNndvt1wK41l9iqg"
+            }
+        ]
+    }
+}

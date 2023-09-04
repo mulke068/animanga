@@ -1,0 +1,15 @@
+{
+  "id": "string",
+  "title": "string",
+  "altTitles": ["string"], // or null
+  "genres": ["string"], // or null
+  "headerForImage": "string", // or null
+  "image": "string", // or null
+  "chapters": [
+    {
+      "id": "string",
+      "title": "string",
+      "releaseDate": "string" // or null
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+// Use DBML to define your database structure
+// Docs: https://www.dbml.org/docs
+
+Table anime {
+  id integer [primary key]
+  names varchar
+  seasons integer
+  episodes integer
+  //watched integer
+  score integer
+  status varchar
+  platform varchar
+  gernes varchar
+  tags varchar
+  types varchar
+  video_link url
+  info_link url
+  img_link url
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table manga {
+  id integer [primary key]
+  names varchar
+  chapters integer
+  //read integer
+  score integer
+  status varchar
+  platform varchar
+  gernes varchar
+  tags varchar
+  types varchar
+  read_link url
+  info_link url
+  img_link url
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table users {
+  id integer [primary key]
+  name varchar
+  email varchar
+  pass varchar
+  created_at timestamp
+}
+
+Table user_anime {
+  user_id integer
+  anime_id integer
+  watched integer
+  score integer
+  updated_at timestamp
+}
+
+Table user_manga {
+  user_id integer
+  manga_id integer
+  read integer
+  score integer
+  updatet_at timestamp
+}
+
+Table platform {
+  id integer [primary key]
+  name varchar
+}
+
+Table gernes {
+  id integer [primary key]
+  name varchar
+}
+
+Table tags {
+  id integer [primary key]
+  name varchar
+}
+
+Table types {
+  id integer [primary key]
+  name varchar
+}
+
+Table status {
+  id integer [primary key]
+  name varchar
+}
+
+Ref: user_anime.user_id < users.id
+Ref: user_anime.anime_id > anime.id
+
+Ref: anime.score < user_anime.score
+Ref: anime.status < status.name
+Ref: anime.platform < platform.name
+Ref: anime.gernes < gernes.name
+Ref: anime.tags < tags.name
+Ref: anime.types < types.name
+
+Ref: user_manga.user_id < users.id
+Ref: user_manga.manga_id > manga.id
+
+Ref: manga.score < user_manga.score
+Ref: manga.status < status.name
+Ref: manga.platform < platform.name
+Ref: manga.gernes < gernes.name
+Ref: manga.tags < tags.name
+Ref: manga.types < types.name
+// Use DBML to define your database structure
+// Docs: https://www.dbml.org/docs
+
+Table anime {
+  id integer [primary key]
+  names varchar
+  seasons integer
+  episodes integer
+  //watched integer
+  score integer
+  status varchar
+  platform varchar
+  gernes varchar
+  tags varchar
+  types varchar
+  video_link url
+  info_link url
+  img_link url
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table manga {
+  id integer [primary key]
+  names varchar
+  chapters integer
+  //read integer
+  score integer
+  status varchar
+  platform varchar
+  gernes varchar
+  tags varchar
+  types varchar
+  read_link url
+  info_link url
+  img_link url
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table users {
+  id integer [primary key]
+  name varchar
+  email varchar
+  pass varchar
+  created_at timestamp
+}
+
+Table user_anime {
+  user_id integer
+  anime_id integer
+  watched integer
+  score integer
+  updated_at timestamp
+}
+
+Table user_manga {
+  user_id integer
+  manga_id integer
+  read integer
+  score integer
+  updatet_at timestamp
+}
+
+Table platform {
+  id integer [primary key]
+  name varchar
+}
+
+Table gernes {
+  id integer [primary key]
+  name varchar
+}
+
+Table tags {
+  id integer [primary key]
+  name varchar
+}
+
+Table types {
+  id integer [primary key]
+  name varchar
+}
+
+Table status {
+  id integer [primary key]
+  name varchar
+}
+
+Ref: user_anime.user_id > users.id // many-to-one
+Ref: user_anime.anime_id > anime.id
+
+Ref: anime.score > user_anime.score
+Ref: anime.status > status.name
+Ref: anime.platform > platform.name
+Ref: anime.gernes > gernes.name
+Ref: anime.tags > tags.name
+Ref: anime.types > types.name
+
+Ref: user_manga.user_id > users.id
+Ref: user_manga.manga_id > manga.id
+
+Ref: manga.score > user_manga.score
+Ref: manga.status > status.name
+Ref: manga.platform > platform.name
+Ref: manga.gernes > gernes.name
+Ref: manga.tags > tags.name
+Ref: manga.types > types.name

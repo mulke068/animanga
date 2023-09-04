@@ -1,0 +1,56 @@
+{
+    "data": {
+        "mal_id": 17030726,
+        "username": "furinadev",
+        "url": "https://myanimelist.net/profile/furinadev",
+        "images": {
+            "jpg": {
+                "image_url": "https://cdn.myanimelist.net/s/common/userimages/b7645b23-f19f-46ef-a9f1-606b920610f7_225w?s=809f4df07dbcecd00f6bbf10fef49c5b"
+            },
+            "webp": {
+                "image_url": "https://cdn.myanimelist.net/s/common/userimages/b7645b23-f19f-46ef-a9f1-606b920610f7_225w?s=809f4df07dbcecd00f6bbf10fef49c5b"
+            }
+        },
+        "last_online": "2023-08-30T07:41:51+00:00",
+        "gender": null,
+        "birthday": null,
+        "location": null,
+        "joined": "2023-08-02T00:00:00+00:00",
+        "statistics": {
+            "anime": {
+                "days_watched": 64.2,
+                "mean_score": 8.29,
+                "watching": 3,
+                "completed": 67,
+                "on_hold": 0,
+                "dropped": 0,
+                "plan_to_watch": 10,
+                "total_entries": 80,
+                "rewatched": 0,
+                "episodes_watched": 3865
+            },
+            "manga": {
+                "days_read": 24.1,
+                "mean_score": 0,
+                "reading": 12,
+                "completed": 14,
+                "on_hold": 0,
+                "dropped": 0,
+                "plan_to_read": 3,
+                "total_entries": 29,
+                "reread": 0,
+                "chapters_read": 3438,
+                "volumes_read": 293
+            }
+        },
+        "favorites": {
+            "anime": [],
+            "manga": [],
+            "characters": [],
+            "people": []
+        },
+        "updates": null,
+        "about": null,
+        "external": null
+    }
+}

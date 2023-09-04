@@ -1,0 +1,110 @@
+version: "3.9"
+name: animanga
+services:
+  # ------------------- surrealdb ----------------------
+  surrealdb:
+    container_name: surrealdb 
+    image: surrealdb/surrealdb:1.0.0-beta.10
+    restart: always
+    command: ["start", "--log", "trace", "--auth", "--user", "root", "--pass", "root", "file:/data", "--allow-all"]
+    ports:
+      - "8000:8000"
+    volumes:
+      - surrealdb_data:/data
+    user: ":"
+    tty: true
+    networks:
+      - db
+  # ------------------- surrealdb Nightly ----------------------
+  surrealdb_nightly:
+    container_name: surrealdb_nightly
+    image: surrealdb/surrealdb:nightly # Nightly
+    restart: always
+    entrypoint:
+      - /surreal
+      - start
+      - --log
+      - "trace"
+      - --user
+      - "root"
+      - --pass
+      - "root"
+      - "memory"
+      - "--allow-all"
+      # - "file:/data/nightly.db"
+    ports:
+      - "8888:8000"
+    volumes:
+      - surrealdb_data:/data
+    # networks:
+    # - db
+  # ------------------- Meilisearch ----------------------
+  meilisearch:
+    container_name: meilisearch
+    image: getmeili/meilisearch:v1.3.2
+    restart: always
+    environment:
+      MEILI_MASTER_KEY: "MASTER_KEY"
+    ports:
+      - "7700:7700"
+    volumes:
+      - meilisearch_data:/data.ms
+    networks:
+      - db
+  # ------------------- Redis ----------------------
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - db
+  # ------------------- api ----------------------
+  # api:
+  #   container_name: api
+  #   build:
+  #     context: ./services/api
+  #     dockerfile: Dockerfile
+  #   restart: always
+  #   # env_file:
+  #   # - .env
+  #   environment:
+  #     - SURREALDB_URL=surrealdb:8000
+  #     - REDIS_URL=http://redis:6379
+  #     - MEILISEARCH_URL=http://meilisearch:7700
+  #   ports:
+  #     - "8080:8080"
+  #   volumes:
+  #     - api_data:/data
+  #   networks:
+  #     - db
+  #     - api
+  # ------------------- api ----------------------
+  # www:
+  #   container_name: www
+  #   build:
+  #     context: ./services/www
+  #     dockerfile: Dockerfile
+  #   restart: always
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - www_data
+  #   networks:
+  #     - api
+  #     - www
+# ------------------- Netowrks ----------------------
+networks:
+  db:
+  api:
+  # www:
+# ------------------- Storage ----------------------
+volumes:
+  surrealdb_data:
+  meilisearch_data:
+  redis_data:
+  api_data:
+  # www_data:

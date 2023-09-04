@@ -1,0 +1,117 @@
+{
+    "data": {
+        "mal_id": 53395,
+        "url": "https://myanimelist.net/manga/53395/Roshutsu_Hentai_Manual",
+        "images": {
+            "jpg": {
+                "image_url": "https://cdn.myanimelist.net/images/manga/3/93613.jpg",
+                "small_image_url": "https://cdn.myanimelist.net/images/manga/3/93613t.jpg",
+                "large_image_url": "https://cdn.myanimelist.net/images/manga/3/93613l.jpg"
+            },
+            "webp": {
+                "image_url": "https://cdn.myanimelist.net/images/manga/3/93613.webp",
+                "small_image_url": "https://cdn.myanimelist.net/images/manga/3/93613t.webp",
+                "large_image_url": "https://cdn.myanimelist.net/images/manga/3/93613l.webp"
+            }
+        },
+        "approved": true,
+        "titles": [{
+                "type": "Default",
+                "title": "Roshutsu Hentai Manual"
+            },
+            {
+                "type": "Synonym",
+                "title": "Bonus"
+            },
+            {
+                "type": "Synonym",
+                "title": "Test"
+            },
+            {
+                "type": "Synonym",
+                "title": "Recital"
+            },
+            {
+                "type": "Synonym",
+                "title": "Exhibition Weather"
+            },
+            {
+                "type": "Synonym",
+                "title": "Summer-Only NEET"
+            },
+            {
+                "type": "Synonym",
+                "title": "Training"
+            },
+            {
+                "type": "Japanese",
+                "title": "露出変態マニュアル"
+            }
+        ],
+        "title": "Roshutsu Hentai Manual",
+        "title_english": null,
+        "title_japanese": "露出変態マニュアル",
+        "title_synonyms": [
+            "Bonus",
+            "Test",
+            "Recital",
+            "Exhibition Weather",
+            "Summer-Only NEET",
+            "Training"
+        ],
+        "type": "Manga",
+        "chapters": 7,
+        "volumes": 1,
+        "status": "Finished",
+        "publishing": false,
+        "published": {
+            "from": "2011-10-07T00:00:00+00:00",
+            "to": null,
+            "prop": {
+                "from": {
+                    "day": 7,
+                    "month": 10,
+                    "year": 2011
+                },
+                "to": {
+                    "day": null,
+                    "month": null,
+                    "year": null
+                }
+            },
+            "string": "Oct 7, 2011"
+        },
+        "score": null,
+        "scored": null,
+        "scored_by": null,
+        "rank": null,
+        "popularity": 30992,
+        "members": 216,
+        "favorites": 0,
+        "synopsis": "1. Bonus 2. Test 3. Recital 4. Roshutsu Hentai Manual 5. Exhibition Weather 6. Summer-Only NEET 7. Training",
+        "background": null,
+        "authors": [{
+            "mal_id": 6590,
+            "type": "people",
+            "name": "Kabashima, Akira",
+            "url": "https://myanimelist.net/people/6590/Akira_Kabashima"
+        }],
+        "serializations": [{
+            "mal_id": 555,
+            "type": "manga",
+            "name": "Comic Mujin",
+            "url": "https://myanimelist.net/manga/magazine/555/Comic_Mujin"
+        }],
+        "genres": [{
+            "mal_id": 12,
+            "type": "manga",
+            "name": "Hentai",
+            "url": "https://myanimelist.net/manga/genre/12/Hentai"
+        }],
+        "explicit_genres": [],
+        "themes": [],
+        "demographics": [],
+        "relations": [],
+        "external": []
+    }
+}
