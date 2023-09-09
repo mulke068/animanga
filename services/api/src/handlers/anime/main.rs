@@ -221,4 +221,3 @@ pub async fn handler_anime_delete(req: HttpRequest, state: web::Data<AppData>) -
         None => HttpResponse::NotFound().body("No Data Found"),
     }
 }
-

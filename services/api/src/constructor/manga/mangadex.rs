@@ -1,8 +1,8 @@
-use serde::Serialize;
 use serde::Deserialize;
+use serde::Serialize;
 
 #[derive(Serialize, Deserialize)]
-pub struct Manga {
+pub struct Mangadex {
     id: String,
     title: String,
 
@@ -10,7 +10,7 @@ pub struct Manga {
     alt_titles: Vec<Option<serde_json::Value>>,
 
     genres: Vec<Option<serde_json::Value>>,
-    
+
     #[serde(rename = "headerForImage")]
     header_for_image: String,
 

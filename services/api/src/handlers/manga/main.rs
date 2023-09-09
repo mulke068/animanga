@@ -1,5 +1,4 @@
-
-use crate::AppData;
+use crate::{middleware::caching::Caching, AppData};
 // ---------------------- Imports -------------------
 use actix_web::{
     web::{self, Query},
@@ -67,37 +66,57 @@ struct FormData {
 
 // ---------------------------- Handlers ------------------------------
 
-pub async fn handler_manga_get(params: HttpRequest, state: web::Data<AppData>) -> impl Responder {
-    let param = Query::<FormData>::from_query(&params.query_string())
+pub async fn handler_manga_get(req: HttpRequest, state: web::Data<AppData>) -> impl Responder {
+    let param = Query::<FormData>::from_query(&req.query_string())
         .unwrap_or_else(|_| panic!("Failed to query from params"));
 
-    let record: Option<MangaRecord> = match state.surreal.select(("manga", &param.id)).await {
-        Ok(data) => data,
-        Err(_) => None,
-    };
+    let cache = Caching::new(req.uri().to_string());
 
-    let res: String = match &record {
+    let cached_data: Option<String> = cache.get(&state).await;
+    match cached_data {
         Some(data) => {
-            serde_json::to_string(&data).unwrap_or_else(|_| panic!("Failed at Serialize data"))
+            // cache.timer_reset(&state).await;
+            HttpResponse::Ok()
+                .append_header((
+                    "X-Cache-Remaining-Time",
+                    cache.timer_get(&state).await.to_string(),
+                ))
+                .body(data)
         }
-        None => String::from("No Data Found"),
-    };
+        None => {
+            let record: Option<MangaRecord> = match state.surreal.select(("manga", &param.id)).await
+            {
+                Ok(data) => data,
+                Err(_) => None,
+            };
 
-    match &record {
-        Some(_) => HttpResponse::Ok().body(res),
-        None => HttpResponse::NotFound().body(res),
+            let res: String = match &record {
+                Some(data) => {
+                    let res = serde_json::to_string(&data)
+                        .unwrap_or_else(|_| panic!("Failed at Serialize data"));
+                    cache.set(&res, &state).await;
+                    res
+                }
+                None => String::from("No Data Found"),
+            };
+
+            match &record {
+                Some(_) => HttpResponse::Ok().body(res),
+                None => HttpResponse::NotFound().body(res),
+            }
+        }
     }
 }
 
 pub async fn handler_manga_post(
-    req: web::Json<Manga>,
+    payload: web::Json<Manga>,
     state: web::Data<AppData>,
 ) -> impl Responder {
     let record: Vec<MangaRecord> = match state
         .surreal
         .create("manga")
         .content(MangaCreate {
-            base: req.base(),
+            base: payload.base(),
             updated_at: Datetime::default(),
             created_at: Datetime::default(),
         })
@@ -131,18 +150,18 @@ pub async fn handler_manga_post(
 }
 
 pub async fn handler_manga_patch(
-    params: HttpRequest,
-    req: web::Json<Manga>,
+    req: HttpRequest,
+    payload: web::Json<Manga>,
     state: web::Data<AppData>,
 ) -> impl Responder {
-    let param = Query::<FormData>::from_query(&params.query_string())
+    let param = Query::<FormData>::from_query(&req.query_string())
         .unwrap_or_else(|_| panic!("Failed to query from params"));
 
     let record: Option<MangaRecord> = match state
         .surreal
         .update(("manga", &param.id))
         .merge(MangaUpdate {
-            base: req.base(),
+            base: payload.base(),
             updated_at: Datetime::default(),
         })
         .await
@@ -166,23 +185,26 @@ pub async fn handler_manga_patch(
         None => String::from("No Data Found | Failed to Create"),
     };
 
+    if let Some(data) = Some(&res) {
+        Caching::new(req.uri().to_string()).set(data, &state).await;
+    }
+
     match &record {
         Some(_) => HttpResponse::Created().body(res),
         None => HttpResponse::NotFound().body(res),
     }
 }
 
-pub async fn handler_manga_delete(
-    params: HttpRequest,
-    state: web::Data<AppData>,
-) -> impl Responder {
-    let param = Query::<FormData>::from_query(&params.query_string())
+pub async fn handler_manga_delete(req: HttpRequest, state: web::Data<AppData>) -> impl Responder {
+    let param = Query::<FormData>::from_query(&req.query_string())
         .unwrap_or_else(|_| panic!("Failed to query from params"));
 
     let record: Option<MangaRecord> = match state.surreal.delete(("manga", &param.id)).await {
         Ok(data) => data,
         Err(_) => None,
     };
+
+    Caching::new(req.uri().to_string()).delete(&state).await;
 
     match &record {
         Some(_) => HttpResponse::Ok().body("Data Deleted"),

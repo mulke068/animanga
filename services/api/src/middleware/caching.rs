@@ -13,7 +13,6 @@ use crate::AppData;
 /// };
 ///
 ///
-///
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Caching {
     // pub method: String,
@@ -59,17 +58,6 @@ impl Caching {
             .unwrap()
     }
 
-    /// ## Resets the Timer to the given default time
-
-    pub async fn timer_reset(&self, state: &web::Data<AppData>) {
-        state
-            .redis
-            .get_connection()
-            .unwrap()
-            .expire(self.get_key(), self.time)
-            .unwrap()
-    }
-
     /// ## Delete the cached Data
 
     pub async fn delete(&self, state: &web::Data<AppData>) {
@@ -78,6 +66,28 @@ impl Caching {
             .get_connection()
             .unwrap()
             .del(self.get_key())
+            .unwrap()
+    }
+
+    /// ## Gives the Timer time
+
+    pub async fn timer_get(&self, state: &web::Data<AppData>) -> isize {
+        state
+            .redis
+            .get_connection()
+            .unwrap()
+            .ttl(self.get_key())
+            .unwrap()
+    }
+
+    /// ## Resets the Timer to the given default time
+
+    pub async fn timer_reset(&self, state: &web::Data<AppData>) -> isize {
+        state
+            .redis
+            .get_connection()
+            .unwrap()
+            .expire(self.get_key(), self.time)
             .unwrap()
     }
 }

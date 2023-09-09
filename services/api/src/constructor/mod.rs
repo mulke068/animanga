@@ -1,2 +1,3 @@
-pub mod crunchyroll;
+pub mod anime;
+pub mod manga;
 pub mod myanimelist;
