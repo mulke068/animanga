@@ -1,0 +1,55 @@
+
+
+<template>
+    <NuxtLink to="/">Home</NuxtLink>
+    <section v-for="name in names" :key="name.id">
+        <div>{{ name.id }}</div>
+        <div>{{ name.aid }}</div>
+        <div>{{ name.original }}</div>
+        <div>{{ name.en }}</div>
+        <div>{{ name.jp }}</div>
+        <NuxtLink :to="`/anime/${name.aid}`">Click ME</NuxtLink>
+    </section>
+</template>
+
+
+
+<script lang="ts" setup>
+import { useFetch } from 'nuxt/app';
+
+// const { data } = await useFetch("http://127.0.0.1:8080/anime/search?q=Fate&l=100");
+const { data } = await useFetch("/api/anime/search?query=Fate&limit=100");
+
+const names = data.value;
+
+</script>
+
+
+
+
+<!-- <script lang="ts">
+export default {
+    data() {
+        return {
+            names: {
+                id: 0,
+                aid: "0",
+                original: "o",
+                en: "en",
+                jp: "jp"
+            },
+        }
+    },
+    mounted() {
+        this.fetchData()
+    },
+    methods: {
+        async fetchData() {
+            const { data: data } = await useFetch("http://127.0.0.1:8080/search?q=Fate&l=100");
+            const getData = JSON.stringify(data.value)
+            const setData = JSON.parse(getData)
+            this.names = data;
+        }
+    }
+}
+</script> -->
