@@ -3,7 +3,7 @@ name: animanga
 services:
   # ------------------- surrealdb ----------------------
   surrealdb:
-    container_name: surrealdb 
+    container_name: surrealdb
     image: surrealdb/surrealdb:1.0.0-beta.11
     restart: always
     command: ["start", "--log", "trace", "--auth", "--user", "root", "--pass", "root", "file:/data", "--allow-all"]
@@ -44,7 +44,9 @@ services:
     image: getmeili/meilisearch:v1.3
     restart: always
     environment:
-      MEILI_MASTER_KEY: "MASTER_KEY"
+      - MEILI_MASTER_KEY=${MEILI_MASTER_KEY}
+      - MEILI_DB_PATH=/data.ms
+      - MEILI_ENV=development
     ports:
       - "7700:7700"
     volumes:

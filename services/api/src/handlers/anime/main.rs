@@ -94,8 +94,13 @@ pub async fn handler_anime_get(req: HttpRequest, state: web::Data<AppData>) -> i
     let cached_data: Option<String> = cache.get(&state).await;
     match cached_data {
         Some(data) => {
-            cache.timer_reset(&state).await;
-            HttpResponse::Ok().body(data)
+            // cache.timer_reset(&state).await;
+            HttpResponse::Ok()
+                .append_header((
+                    "X-Cache-Remaining-Time",
+                    cache.timer_get(&state).await.to_string(),
+                ))
+                .body(data)
         }
         None => {
             let record: Option<AnimeRecord> = match state.surreal.select(("anime", &param.id)).await
