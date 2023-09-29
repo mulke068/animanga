@@ -4,7 +4,7 @@ services:
   # ------------------- surrealdb ----------------------
   surrealdb:
     container_name: surrealdb
-    image: surrealdb/surrealdb:1.0.0-beta.11
+    image: surrealdb/surrealdb:1.0.0
     restart: always
     command: ["start", "--log", "trace", "--auth", "--user", "root", "--pass", "root", "file:/data", "--allow-all"]
     ports:
@@ -41,7 +41,7 @@ services:
   # ------------------- Meilisearch ----------------------
   meilisearch:
     container_name: meilisearch
-    image: getmeili/meilisearch:v1.3
+    image: getmeili/meilisearch:v1.4
     restart: always
     environment:
       - MEILI_MASTER_KEY=${MEILI_MASTER_KEY}

@@ -14,7 +14,8 @@
     "@nuxt/image": "^0.7.1",
     "@nuxt/ui": "^2.8.1",
     "@nuxtjs/partytown": "latest",
-    "nuxt": "^3.7.1"
+    "nuxt": "^3.7.1",
+    "typescript": "^5.2.2"
   },
   "dependencies": {
     "nuxt-meilisearch": "^0.1.9"

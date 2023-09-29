@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 use surrealdb::sql::{Datetime, Thing};
 
-use super::search::{MangaNames, MangaSearch};
+use super::search::MangaSearch;
 // ---------------------- Structs -------------------
 
 trait MangaField {
@@ -17,7 +17,7 @@ trait MangaField {
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Manga {
-    names: MangaNames,
+    names: MangaSearch,
     chapters: u16,
     volumes: u16,
     score: u8,
@@ -131,7 +131,7 @@ pub async fn handler_manga_post(
             let data = &record[0];
             let search_index = state.meilisearch.index("manga");
             let names: MangaSearch = MangaSearch {
-                mid: data.id.to_string(),
+                db_id: data.id.id.to_string(),
                 original: data.base.names.original.clone(),
                 en: data.base.names.en.clone(),
                 jp: data.base.names.jp.clone(),
@@ -174,7 +174,7 @@ pub async fn handler_manga_patch(
         Some(data) => {
             let search_index = state.meilisearch.index("manga");
             let names: MangaSearch = MangaSearch {
-                mid: data.id.to_string(),
+                db_id: data.id.id.to_string(),
                 original: data.base.names.original.clone(),
                 en: data.base.names.en.clone(),
                 jp: data.base.names.jp.clone(),

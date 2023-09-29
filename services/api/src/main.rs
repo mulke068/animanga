@@ -10,9 +10,8 @@ use surrealdb::Surreal;
 // --------------------- Main ---------------------
 use once_cell::sync::Lazy;
 #[allow(non_upper_case_globals)]
-static client_surreal: Lazy<Surreal<surrealdb::engine::remote::ws::Client>> = Lazy::new(|| {
-    Surreal::init()
-});
+static client_surreal: Lazy<Surreal<surrealdb::engine::remote::ws::Client>> =
+    Lazy::new(|| Surreal::init());
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {

@@ -1,4 +1,4 @@
-use super::search::{AnimeNames, AnimeSearch};
+use super::search::AnimeSearch;
 use crate::{middleware::caching::Caching, AppData};
 // ---------------------- Imports -------------------
 use actix_web::{
@@ -16,30 +16,21 @@ trait AnimeField {
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Anime {
-    names: AnimeNames,
+    names: AnimeSearch,
 
     season: u8,
-
     episodes: u8,
-
     score: u8,
-
     status: String,
 
     types: Vec<String>,
-
     platforms: Vec<String>,
-
     genres: Vec<String>,
-
     tags: Vec<String>,
 
     trailer_urls: Vec<String>,
-
     info_urls: Vec<String>,
-
     video_urls: Vec<String>,
-
     image_urls: Vec<String>,
 }
 
@@ -55,7 +46,6 @@ struct AnimeCreate {
     base: Anime,
 
     updated_at: Datetime,
-
     created_at: Datetime,
 }
 
@@ -74,7 +64,6 @@ struct AnimeRecord {
     base: Anime,
 
     updated_at: Datetime,
-
     created_at: Datetime,
 }
 
@@ -149,7 +138,7 @@ pub async fn handler_anime_post(
             let data = &record[0];
             let index = state.meilisearch.index("anime");
             let name: AnimeSearch = AnimeSearch {
-                aid: data.id.to_string(),
+                db_id: data.id.id.to_string(),
                 original: data.base.names.original.clone(),
                 en: data.base.names.en.clone(),
                 jp: data.base.names.jp.clone(),
@@ -192,7 +181,7 @@ pub async fn handler_anime_patch(
         Some(data) => {
             let index = state.meilisearch.index("anime");
             let name: AnimeSearch = AnimeSearch {
-                aid: data.id.to_string(),
+                db_id: data.id.id.to_string(),
                 original: data.base.names.original.clone(),
                 en: data.base.names.en.clone(),
                 jp: data.base.names.jp.clone(),
