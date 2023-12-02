@@ -3,6 +3,7 @@
 // -------------------- Imports --------------------
 use actix_web::{/*guard,*/ middleware::Logger, web, App, HttpResponse, HttpServer, Responder,};
 use log::{error, info};
+use meilisearch_sdk::settings;
 // ------------------------------------------------
 use surrealdb::engine::remote::ws::Ws;
 use surrealdb::opt::auth::Root;
@@ -94,6 +95,24 @@ async fn main() -> std::io::Result<()> {
     let client_meilisearch: meilisearch_sdk::Client =
         meilisearch_sdk::Client::new(meilisearch_url, Some("MASTER_KEY"));
 
+    {
+        let settings = settings::Settings {
+            ranking_rules: Some(vec![
+                "typo".to_string(),
+                "words".to_string(),
+                "proximity".to_string(),
+                "attribute".to_string(),
+                "wordsPosition".to_string(),
+                "exactness".to_string(),
+                "release_date:desc".to_string(),
+                "score:desc".to_string(),
+            ]),
+            ..Default::default()
+        };
+        client_meilisearch.index("anime").set_settings(&settings).await.unwrap();
+        client_meilisearch.index("manga").set_settings(&settings).await.unwrap();
+    }
+
     HttpServer::new(move || {
         App::new()
             .wrap(Logger::new(
@@ -169,15 +188,6 @@ async fn main() -> std::io::Result<()> {
                 web::resource("/manga/search")
                     .route(web::get().to(api::handlers::manga::search::get))
                     .route(web::post().to(api::handlers::manga::search::post)),
-            )
-            .service(
-                web::resource("/test")
-                    .name("testing route")
-                    // .guard(guard::Header("Content-Type", "application/json"))
-                    .route(web::get().to(api::handlers::test::test_get))
-                    .route(web::post().to(api::handlers::test::test_post))
-                    .route(web::patch().to(api::handlers::test::test_patch))
-                    .route(web::delete().to(api::handlers::test::test_delete)),
             )
             .service(
                 web::scope("/status")

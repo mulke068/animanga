@@ -11,7 +11,7 @@
   "devDependencies": {
     "@nuxt/content": "^2.8.2",
     "@nuxt/devtools": "latest",
-    "@nuxt/image": "^0.7.1",
+    "@nuxt/image": "^1.1.0",
     "@nuxt/ui": "^2.8.1",
     "@nuxtjs/partytown": "latest",
     "nuxt": "^3.7.1",

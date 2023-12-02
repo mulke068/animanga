@@ -10,18 +10,18 @@ use surrealdb::sql::Thing;
 // ---------------------------- Structs ------------------------------
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-struct UserPermission {
-    grade: u8,
-    read: bool,
-    write: bool,
-    update: bool,
-    delete: bool,
+pub struct UserPermission {
+    pub grade: u8,
+    pub read: bool,
+    pub write: bool,
+    pub update: bool,
+    pub delete: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-struct UserName {
-    first: String,
-    last: String,
+pub struct UserName {
+    pub first: String,
+    pub last: String,
 }
 
 trait UsersField {
@@ -30,13 +30,13 @@ trait UsersField {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Users {
-    username: String,
-    name: UserName,
-    email: String,
-    password: String,
-    status: bool,
-    role: String,
-    permission: UserPermission,
+    pub username: String,
+    pub name: UserName,
+    pub email: String,
+    pub password: String,
+    pub status: bool,
+    pub role: String,
+    pub permission: UserPermission,
 }
 
 impl UsersField for Users {
@@ -62,12 +62,12 @@ struct UsersUpdate {
 
 #[derive(Debug, Deserialize, Serialize)]
 #[allow(dead_code)]
-struct UsersRecord {
-    id: Thing,
+pub struct UsersRecord {
+    pub id: Thing,
     #[serde(flatten)]
-    base: Users,
-    updated_at: Datetime,
-    created_at: Datetime,
+    pub base: Users,
+    pub updated_at: Datetime,
+    pub created_at: Datetime,
 }
 
 #[derive(Deserialize)]

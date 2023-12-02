@@ -4,6 +4,7 @@ pub mod constructor;
 pub mod handlers;
 pub mod middleware;
 pub mod modules;
+pub mod tests;
 
 /// # Where the DB client lives
 ///
