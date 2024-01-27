@@ -4,7 +4,7 @@ services:
   # ------------------- surrealdb ----------------------
   surrealdb:
     container_name: surrealdb
-    image: surrealdb/surrealdb:1.0.0
+    image: surrealdb/surrealdb:v1.1.1
     restart: always
     command: ["start", "--log", "trace", "--auth", "--user", "root", "--pass", "root", "file:/data", "--allow-all"]
     ports:
@@ -16,43 +16,43 @@ services:
     networks:
       - db
   # ------------------- surrealdb Nightly ----------------------
-  surrealdb_nightly:
-    container_name: surrealdb_nightly
-    image: surrealdb/surrealdb:nightly # Nightly
-    restart: always
-    entrypoint:
-      - /surreal
-      - start
-      - --log
-      - "trace"
-      - --user
-      - "root"
-      - --pass
-      - "root"
-      - "memory"
-      - "--allow-all"
-      # - "file:/data/nightly.db"
-    ports:
-      - "8888:8000"
-    volumes:
-      - surrealdb_data:/data
+  # surrealdb_nightly:
+  #   container_name: surrealdb_nightly
+  #   image: surrealdb/surrealdb:nightly # Nightly
+  #   restart: always
+  #   entrypoint:
+  #     - /surreal
+  #     - start
+  #     - --log
+  #     - "trace"
+  #     - --user
+  #     - "root"
+  #     - --pass
+  #     - "root"
+  #     - "memory"
+  #     - "--allow-all"
+  #     # - "file:/data/nightly.db"
+  #   ports:
+  #     - "8888:8000"
+  #   volumes:
+  #     - surrealdb_data:/data
     # networks:
     # - db
   # ------------------- Meilisearch ----------------------
-  meilisearch:
-    container_name: meilisearch
-    image: getmeili/meilisearch:v1.4
-    restart: always
-    environment:
-      - MEILI_MASTER_KEY=${MEILI_MASTER_KEY}
-      - MEILI_DB_PATH=/data.ms
-      - MEILI_ENV=development
-    ports:
-      - "7700:7700"
-    volumes:
-      - meilisearch_data:/data.ms
-    networks:
-      - db
+  # meilisearch:
+  #   container_name: meilisearch
+  #   image: getmeili/meilisearch:v1.5.1
+  #   restart: always
+  #   environment:
+  #     - MEILI_MASTER_KEY=${MEILI_MASTER_KEY}
+  #     - MEILI_DB_PATH=/data.ms
+  #     - MEILI_ENV=development
+  #   ports:
+  #     - "7700:7700"
+  #   volumes:
+  #     - meilisearch_data:/data.ms
+  #   networks:
+  #     - db
   # ------------------- Redis ----------------------
   redis:
     container_name: redis
@@ -106,7 +106,7 @@ networks:
 # ------------------- Storage ----------------------
 volumes:
   surrealdb_data:
-  meilisearch_data:
+  # meilisearch_data:
   redis_data:
-  api_data:
+  # api_data:
   # www_data:
