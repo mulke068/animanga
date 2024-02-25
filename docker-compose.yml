@@ -4,7 +4,7 @@ services:
   # ------------------- surrealdb ----------------------
   surrealdb:
     container_name: surrealdb
-    image: surrealdb/surrealdb:v1.1.1
+    image: surrealdb/surrealdb:v1.2.1
     restart: always
     command: ["start", "--log", "trace", "--auth", "--user", "root", "--pass", "root", "file:/data", "--allow-all"]
     ports:
@@ -65,48 +65,57 @@ services:
     networks:
       - db
   # ------------------- api ----------------------
-  # api:
-  #   container_name: api
-  #   build:
-  #     context: ./services/api
-  #     dockerfile: Dockerfile
-  #   restart: always
-  #   # env_file:
-  #   # - .env
-  #   environment:
-  #     - SURREALDB_URL=surrealdb:8000
-  #     - REDIS_URL=http://redis:6379
-  #     - MEILISEARCH_URL=http://meilisearch:7700
-  #   ports:
-  #     - "8080:8080"
-  #   volumes:
-  #     - api_data:/data
-  #   networks:
-  #     - db
-  #     - api
+  api:
+    container_name: api
+    build:
+      context: ./animanga_api
+      dockerfile: Dockerfile
+    restart: always
+    command: ./target/release/api
+    env_file:
+    - .env
+    # environment:
+      # - SURREALDB_URL=surrealdb:8000
+      # - REDIS_URL=http://redis:6379
+      # - MEILISEARCH_URL=http://meilisearch:7700
+    ports:
+      - "8080:8080"
+    volumes:
+      - api_data:/data
+    depends_on:
+      - surrealdb
+    networks:
+      - db
+      - api
   # ------------------- api ----------------------
-  # www:
-  #   container_name: www
-  #   build:
-  #     context: ./services/www
-  #     dockerfile: Dockerfile
-  #   restart: always
-  #   ports:
-  #     - "80:80"
-  #   volumes:
-  #     - www_data
-  #   networks:
-  #     - api
-  #     - www
+  www:
+    container_name: www
+    build:
+      context: ./animanga_web
+      dockerfile: Dockerfile
+    restart: always
+    command: node .output/server/index.mjs
+    ports:
+      - "80:80"
+    volumes:
+      - www_data
+    depends_on:
+      - api
+    networks:
+      - api
+      - www
 # ------------------- Netowrks ----------------------
 networks:
   db:
   api:
-  # www:
+  www:
+# networks:
+#   default:
+#     driver: bridge
 # ------------------- Storage ----------------------
 volumes:
   surrealdb_data:
   # meilisearch_data:
   redis_data:
-  # api_data:
-  # www_data:
+  api_data:
+  www_data:
