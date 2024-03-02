@@ -7,14 +7,14 @@ services:
     image: surrealdb/surrealdb:v1.2.1
     restart: always
     command: ["start", "--log", "trace", "--auth", "--user", "root", "--pass", "root", "file:/data", "--allow-all"]
-    ports:
-      - "8000:8000"
-    volumes:
-      - surrealdb_data:/data
     user: ":"
     tty: true
+    volumes:
+      - surrealdb_data:/data
     networks:
       - db
+    ports:
+      - "8000:8000"
   # ------------------- surrealdb Nightly ----------------------
   # surrealdb_nightly:
   #   container_name: surrealdb_nightly
@@ -58,12 +58,12 @@ services:
     container_name: redis
     image: redis:latest
     restart: always
-    ports:
-      - "6379:6379"
     volumes:
       - redis_data:/data
     networks:
       - db
+    ports:
+      - "6379:6379"
   # ------------------- api ----------------------
   api:
     container_name: api
@@ -73,41 +73,45 @@ services:
     restart: always
     command: ./target/release/api
     env_file:
-    - .env
-    # environment:
-      # - SURREALDB_URL=surrealdb:8000
-      # - REDIS_URL=http://redis:6379
-      # - MEILISEARCH_URL=http://meilisearch:7700
-    ports:
-      - "8080:8080"
-    volumes:
-      - api_data:/data
+      - ./.env
     depends_on:
       - surrealdb
+    volumes:
+      - api_data:/data
     networks:
       - db
       - api
-  # ------------------- api ----------------------
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+  # ------------------- web ----------------------
   www:
     container_name: www
     build:
       context: ./animanga_web
       dockerfile: Dockerfile
-    restart: always
+    restart: always    
     command: node .output/server/index.mjs
-    ports:
-      - "80:80"
-    volumes:
-      - www_data
+    env_file:
+      - ./.env
     depends_on:
       - api
+    volumes:
+      - www_data:/data
     networks:
       - api
       - www
+    ports:
+      - "80:3000"
+    expose:
+      - "80"
 # ------------------- Netowrks ----------------------
 networks:
   db:
+    driver: bridge
   api:
+    driver: bridge
   www:
 # networks:
 #   default:
