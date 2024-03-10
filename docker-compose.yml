@@ -4,7 +4,7 @@ services:
   # ------------------- surrealdb ----------------------
   surrealdb:
     container_name: surrealdb
-    image: surrealdb/surrealdb:v1.2.1
+    image: surrealdb/surrealdb:v1.2.2
     restart: always
     command: ["start", "--log", "trace", "--auth", "--user", "root", "--pass", "root", "file:/data", "--allow-all"]
     user: ":"
@@ -77,7 +77,7 @@ services:
     depends_on:
       - surrealdb
     volumes:
-      - api_data:/data
+      - api_data:/api
     networks:
       - db
       - api
@@ -98,7 +98,7 @@ services:
     depends_on:
       - api
     volumes:
-      - www_data:/data
+      - www_data:/web
     networks:
       - api
       - www
