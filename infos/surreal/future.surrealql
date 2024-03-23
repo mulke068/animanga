@@ -1,0 +1,139 @@
+let $REF_NOW = time::now();
+
+CREATE user:1 SET
+    username = "Kevbchef",
+    name.first = "kevin",
+    name.last = "Muller",
+    email = "kevin@example.com",
+    password = "1234",
+    lang = "en",
+    status = true,
+    role = "owner",
+    permission.grade = 0,
+    permission.select = true,
+    permission.create = true,
+    permission.update = true,
+    permission.delete = true,
+    updated_at = $REF_NOW,
+    created_at = $REF_NOW;
+
+CREATE anime:1 SET
+    season = 3,
+    episodes = 21,
+    score = 8,
+    status = "Finished",
+    visible = true,
+    description = 'The anime "Fate/Grand Order: Absolute Demonic Front - Babylonia" falls under the genres of action, adventure, fantasy, magic, and supernatural. It is part of the larger Fate franchise and has a total of 21 episodes in its third season. The show is rated 8 out of 10. The status is marked as "Finished," and it is available on Crunchyroll, Funimation, and Netflix streaming platforms. Additionally, it belongs to the Isekai, TV, and Game types.',
+    types = [
+        "Isakai",
+        "TV",
+        "Game"
+    ],
+    platforms = [
+        "Crunchyroll",
+        "Funimation",
+        "Netflix"
+    ],
+    genres = [
+        "action",
+        "adventure",
+        "fantasy",
+        "magic",
+        "supernatural"
+    ],
+    tags = [
+        "anime",
+        "fate",
+        "fate grand order",
+        "fate series",
+        "fate stay night",
+        "fgo",
+        "fgo babylonia",
+        "fgo zettai majuu sensen babylonia",
+    ],
+    trailer_urls = [],
+    info_urls = ["https://myanimelist.net/anime/38084/Fate_Grand_Order__Zettai_Majuu_Sensen_Babylonia"],
+    video_urls = ["https://bs.to/serie/Fate-Grand-Order-Zettai-Majuu-Sensen-Babylonia"],
+    image_urls = ["https://cdn.myanimelist.net/images/anime/1194/103420.jpg"],
+    related = ["manga:1"],
+    updated_at = $REF_NOW,
+    created_at = $REF_NOW;
+
+CREATE manga:1 SET
+    chapters = 50,
+    volumes = 10,
+    score = 8,
+    status = "Ongoing",
+    visible = true,
+    description = 'This is an example manga with various genres and tags.',
+    types = ["Action", "Adventure", "Fantasy"],
+    platforms = ["MangaPlus", "Shonen Jump", "VIZ Media"],
+    genres = ["Shounen", "Comedy", "Supernatural"],
+    tags = ["Superpowers", "Demon Slayer", "Training Arc"],
+    info_urls = ["https://manga-info-url.com", "https://another-manga-info-url.com"],
+    read_urls = ["https://read-manga-url.com", "https://manga-reader-url.com"],
+    image_urls = ["https://manga-cover-image-url.com", "https://another-manga-cover-image-url.com"],
+    related = ["anime:1"],
+    updated_at = $REF_NOW,
+    created_at = $REF_NOW;
+
+CREATE anime_names:1 SET
+    anime_id = anime:1,
+    visible = true,
+    orginal = [],
+    en = ["Fate/Grand Order: Absolute Demonic Front - Babylonia"],
+    jp = ["Fate/Grand Order: Zettai Majuu Sensen Babylonia"],
+    updated_at = $REF_NOW,
+    created_at = $REF_NOW;
+
+CREATE manga_names:1 SET
+    manga_id = manga:1,
+    visible = true,
+    orginal = []
+    en = ["Manga Title"],
+    jp = ["マンガのタイトル"],
+    updated_at = $REF_NOW,
+    created_at = $REF_NOW;
+
+RELATE user:1->user_anime:1->anime:1 SET
+    watched = 3,
+    score = 4,
+    status = "watching",
+    favorite = true,
+    notes = "I find that anime nice",
+    updated_at = $REF_NOW,
+    created_at = $REF_NOW;
+
+RELATE user:1->user_manga:1->manga:1 SET
+    read = 3,
+    score = 4,
+    status = "Finished",
+    favorite = false,
+    notes = "Personaly i dont like it",
+    updated_at = $REF_NOW,
+    created_at = $REF_NOW;
+
+CREATE Status SET
+    name = "Ongoing",
+    updated_at = $REF_NOW,
+    created_at = $REF_NOW;
+
+CREATE Type SET
+    name = "Manhua",
+    updated_at = $REF_NOW,
+    created_at = $REF_NOW;
+
+CREATE Platform SET
+    name = "Crunchyroll",
+    updated_at = $REF_NOW,
+    created_at = $REF_NOW;
+
+CREATE Genres SET
+    name = "action",
+    updated_at = $REF_NOW,
+    created_at = $REF_NOW;
+
+CREATE Tags SET
+    name = "anime",
+    updated_at = $REF_NOW,
+    created_at = $REF_NOW;

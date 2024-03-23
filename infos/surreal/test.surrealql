@@ -1,0 +1,46 @@
+// ----------------------------------------------------------------------------------------------------------------------------------------------
+
+# DELETE user;
+# REMOVE TABLE user;
+
+
+CREATE user SET
+    username = $username,
+    name.first = $first_name,
+    name.last = $last_name,
+    email = $email,
+    password = $password,
+    status = $status,
+    role = $role,
+    permissions = $permissions
+;
+# 
+# UPDATE user:1tiyyb4ldm8r29p2q350 SET
+#     username = $username,
+#     name.first = $first_name,
+#     name.last = $last_name,
+#     email = $email,
+#     password = $password,
+#     status = true
+
+
+// ----------------------------------------------------------------------------------------------------------------------------
+// -------------------              Variables --------------------------------------------
+
+{
+    "username": "Kevbchef",
+    "first_name": "Kevin",
+    "last_name": "Muller",
+    "email": "kevin@example.com",
+    "password": "123456",
+    "status": true,
+    "role": "owner",
+    "permissions": {
+        "grade": 0,
+        "read": true,
+        "write": true,
+        "update": true,
+        "delete": true
+        
+    }
+}

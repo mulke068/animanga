@@ -1,0 +1,174 @@
+DELETE anime;
+REMOVE TABLE anime;
+DELETE manga;
+REMOVE TABLE manga;
+
+DELETE user;
+REMOVE TABLE user;
+
+DELETE has_anime;
+REMOVE TABLE has_anime;
+DELETE has_manga;
+REMOVE TABLE has_manga;
+
+DELETE user_hach;
+REMOVE TABLE user_hach;
+DELETE has_hach;
+REMOVE TABLE has_hach;
+
+REMOVE SCOPE account;
+REMOVE EVENT encrypt_password ON TABLE user;
+
+
+DEFINE TABLE anime SCHEMAFULL;
+DEFINE INDEX names ON TABLE anime COLUMNS names SEARCH ANALYZER ascii BM25 HIGHLIGHTS;
+
+DEFINE FIELD names ON TABLE anime TYPE option<object>;
+DEFINE FIELD names.original ON TABLE anime TYPE string;
+DEFINE FIELD names.en ON TABLE anime TYPE string;
+DEFINE FIELD names.jp ON TABLE anime TYPE string;
+DEFINE FIELD season ON TABLE anime TYPE int;
+DEFINE FIELD episodes ON TABLE anime TYPE int;
+DEFINE FIELD score ON TABLE anime TYPE int;
+DEFINE FIELD status ON TABLE anime FLEXIBLE TYPE string;
+# DEFINE FIELD visible ON TABLE anime TYPE bool DEFAULT true;
+# DEFINE FIELD description ON TABLE anime TYPE string;
+DEFINE FIELD types ON TABLE anime TYPE array;
+DEFINE FIELD types.* ON TABLE anime TYPE string;
+DEFINE FIELD platforms ON TABLE anime TYPE array;
+DEFINE FIELD platforms.* ON TABLE anime TYPE string;
+DEFINE FIELD genres ON TABLE anime TYPE array;
+DEFINE FIELD genres.* ON TABLE anime TYPE string;
+DEFINE FIELD tags ON TABLE anime TYPE array;
+DEFINE FIELD tags.* ON TABLE anime TYPE string;
+DEFINE FIELD trailer_urls ON TABLE anime TYPE array;
+DEFINE FIELD trailer_urls.* ON TABLE anime TYPE string;
+DEFINE FIELD info_urls ON TABLE anime TYPE array;
+DEFINE FIELD info_urls.* ON TABLE anime TYPE string;
+DEFINE FIELD video_urls ON TABLE anime TYPE array;
+DEFINE FIELD video_urls.* ON TABLE anime TYPE string;
+DEFINE FIELD image_urls ON TABLE anime TYPE array;
+DEFINE FIELD image_urls.* ON TABLE anime TYPE string;
+DEFINE FIELD updated_at ON TABLE anime TYPE datetime DEFAULT time::now();
+DEFINE FIELD created_at ON TABLE anime TYPE datetime DEFAULT time::now();
+
+
+DEFINE TABLE manga SCHEMAFULL;
+DEFINE INDEX names ON TABLE manga COLUMNS names SEARCH ANALYZER ascii BM25 HIGHLIGHTS;
+
+DEFINE FIELD names ON TABLE manga TYPE option<object>;
+DEFINE FIELD names.original ON TABLE manga TYPE string;
+DEFINE FIELD names.en ON TABLE manga TYPE option<string>;
+DEFINE FIELD names.jp ON TABLE manga TYPE option<string>;
+DEFINE FIELD chapters ON TABLE manga TYPE int;
+DEFINE FIELD volumes ON TABLE manga TYPE int;
+DEFINE FIELD score ON TABLE manga TYPE int;
+DEFINE FIELD status ON TABLE manga FLEXIBLE TYPE string;
+# DEFINE FIELD visible ON TABLE manga TYPE bool DEFAULT true;
+# DEFINE FIELD description ON TABLE manga TYPE string;
+DEFINE FIELD types ON TABLE manga TYPE array;
+DEFINE FIELD types.* ON TABLE manga TYPE string;
+DEFINE FIELD platforms ON TABLE manga TYPE array;
+DEFINE FIELD platforms.* ON TABLE manga TYPE string;
+DEFINE FIELD genres ON TABLE manga TYPE array;
+DEFINE FIELD genres.* ON TABLE manga TYPE string;
+DEFINE FIELD tags ON TABLE manga TYPE array;
+DEFINE FIELD tags.* ON TABLE manga TYPE string;
+DEFINE FIELD info_urls ON TABLE manga TYPE array;
+DEFINE FIELD info_urls.* ON TABLE manga TYPE string;
+DEFINE FIELD read_urls ON TABLE manga TYPE array;
+DEFINE FIELD read_urls.* ON TABLE manga TYPE string;
+DEFINE FIELD image_urls ON TABLE manga TYPE array;
+DEFINE FIELD image_urls.* ON TABLE manga TYPE string;
+DEFINE FIELD updated_at ON TABLE manga TYPE datetime DEFAULT time::now();
+DEFINE FIELD created_at ON TABLE manga TYPE datetime DEFAULT time::now();
+
+
+DEFINE TABLE user SCHEMAFULL
+    PERMISSIONS
+        FOR select WHERE id = $auth.id
+        FOR update, create , delete NONE;
+
+DEFINE INDEX username ON TABLE user COLUMNS username UNIQUE;
+
+DEFINE FIELD username ON TABLE user TYPE string 
+    ASSERT  $value != NONE;
+DEFINE FIELD name ON TABLE user FLEXIBLE TYPE option<object>;
+DEFINE FIELD name.first ON TABLE user TYPE string;
+DEFINE FIELD name.last ON TABLE user TYPE string;
+DEFINE INDEX email ON TABLE user COLUMNS email UNIQUE;
+DEFINE FIELD email ON TABLE user TYPE string
+    ASSERT $value != NONE AND string::is::email($value);
+DEFINE FIELD password ON TABLE user TYPE string
+    ASSERT  $value != NONE;
+DEFINE FIELD status ON TABLE user TYPE bool DEFAULT false;
+DEFINE FIELD role ON TABLE user TYPE string DEFAULT "user";
+DEFINE FIELD permission ON TABLE user FLEXIBLE TYPE option<object>;
+DEFINE FIELD permission.grade ON TABLE user TYPE int DEFAULT 1000000;
+DEFINE FIELD permission.select ON TABLE user TYPE bool DEFAULT true;
+DEFINE FIELD permission.create ON TABLE user TYPE bool DEFAULT false;
+DEFINE FIELD permission.update ON TABLE user TYPE bool DEFAULT false;
+DEFINE FIELD permission.delete ON TABLE user TYPE bool DEFAULT false;
+DEFINE FIELD updated_at ON TABLE user TYPE datetime DEFAULT time::now();
+DEFINE FIELD created_at ON TABLE user TYPE datetime DEFAULT time::now();
+
+
+-- DEFINE TABLE user_hach SCHEMAFULL
+--     PERMISSIONS
+--         FOR select WHERE id = $auth.id
+--         FOR update, create , delete NONE;
+        
+-- DEFINE INDEX username ON TABLE user_hach COLUMNS username UNIQUE;
+-- DEFINE FIELD username ON TABLE user_hach TYPE string;
+-- DEFINE FIELD password ON user_hach TYPE string;
+
+-- DEFINE FIELD in ON TABLE has_hach TYPE record<user>;
+-- DEFINE FIELD out ON TABLE has_hach TYPE record<user_hach>;
+
+-- DEFINE EVENT IF NOT EXISTS encrypt_password ON TABLE user WHEN $event = "CREATE" THEN {    
+--     UPDATE user SET password = crypto::argon2::generate($value.password);
+-- };
+
+DEFINE SCOPE account SESSION 10s
+    SIGNIN {
+        
+        LET $user = (SELECT * FROM user WHERE username = $user AND crypto::argon2::compare(password, $pass));
+        
+        IF !$user {
+            THROW "You either provided invalid credentials, or a user with the username " + <string> $user + " might not exist.";
+        };
+
+        RETURN $user;
+    }
+    SIGNUP {
+        -- SELECT * FROM user_hach WHERE username = $user AND crypto::argon2::compare(password, $pass);
+
+        $value.password = crypto::argon2::generate($value.password);
+
+        CREATE user CONTENT $value;
+    }
+;
+
+
+DEFINE TABLE has_anime SCHEMAFULL;
+DEFINE INDEX out ON TABLE has_anime COLUMNS out UNIQUE;
+
+DEFINE FIELD in ON TABLE has_anime TYPE record<user>;
+DEFINE FIELD out ON TABLE has_anime TYPE record<anime>;
+DEFINE FIELD watched ON TABLE has_anime TYPE int;
+DEFINE FIELD score ON TABLE has_anime TYPE int;
+DEFINE FIELD status ON TABLE has_anime TYPE string;
+DEFINE FIELD updated_at ON TABLE has_anime TYPE datetime DEFAULT time::now();
+DEFINE FIELD created_at ON TABLE has_anime TYPE datetime DEFAULT time::now();
+
+
+DEFINE TABLE has_anime SCHEMAFULL;
+DEFINE INDEX out ON TABLE has_anime COLUMNS out UNIQUE;
+
+DEFINE FIELD in ON TABLE has_manga TYPE record<user>;
+DEFINE FIELD out ON TABLE has_manga TYPE record<manga>;
+DEFINE FIELD read ON TABLE has_manga TYPE int;
+DEFINE FIELD score ON TABLE has_manga TYPE int;
+DEFINE FIELD status ON TABLE has_manga TYPE string;
+DEFINE FIELD updated_at ON TABLE has_manga TYPE datetime DEFAULT time::now();
+DEFINE FIELD created_at ON TABLE has_manga TYPE datetime DEFAULT time::now();
