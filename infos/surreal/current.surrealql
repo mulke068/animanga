@@ -125,9 +125,9 @@ DEFINE FIELD created_at ON TABLE user TYPE datetime DEFAULT time::now();
 -- DEFINE FIELD in ON TABLE has_hach TYPE record<user>;
 -- DEFINE FIELD out ON TABLE has_hach TYPE record<user_hach>;
 
--- DEFINE EVENT IF NOT EXISTS encrypt_password ON TABLE user WHEN $event = "CREATE" THEN {    
---     UPDATE user SET password = crypto::argon2::generate($value.password);
--- };
+DEFINE EVENT IF NOT EXISTS encrypt_password ON TABLE user WHEN $event = "CREATE" THEN {    
+     UPDATE user SET password = crypto::argon2::generate($value.password);
+ };
 
 DEFINE SCOPE account SESSION 10s
     SIGNIN {

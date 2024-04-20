@@ -4,7 +4,7 @@ services:
   # ------------------- surrealdb ----------------------
   surrealdb:
     container_name: surrealdb
-    image: surrealdb/surrealdb:v1.3.1
+    image: surrealdb/surrealdb:v1.4.0
     restart: always
     command: ["start", "--log", "trace", "--auth", "--user", "root", "--pass", "root", "file:/data", "--allow-all"]
     user: ":"
@@ -54,58 +54,58 @@ services:
   #   networks:
   #     - db
   # ------------------- Redis ----------------------
-  redis:
-    container_name: redis
-    image: redis:latest
-    restart: always
-    volumes:
-      - redis_data:/data
-    networks:
-      - db
-    ports:
-      - "6379:6379"
+  # redis:
+  #   container_name: redis
+  #   image: redis:latest
+  #   restart: always
+  #   volumes:
+  #     - redis_data:/data
+  #   networks:
+  #     - db
+  #   ports:
+  #     - "6379:6379"
   # ------------------- api ----------------------
-  api:
-    container_name: api
-    build:
-      context: ./animanga_api
-      dockerfile: Dockerfile
-    restart: always
-    command: ./target/release/api
-    env_file:
-      - ./.env
-    depends_on:
-      - surrealdb
-    volumes:
-      - api_data:/api
-    networks:
-      - db
-      - api
-    ports:
-      - "8080:8080"
-    expose:
-      - "8080"
+  # api:
+  #   container_name: api
+  #   build:
+  #     context: ./animanga_api
+  #     dockerfile: Dockerfile
+  #   restart: always
+  #   command: ./target/release/api
+  #   env_file:
+  #     - ./.env
+  #   depends_on:
+  #     - surrealdb
+  #   volumes:
+  #     - api_data:/api
+  #   networks:
+  #     - db
+  #     - api
+  #   ports:
+  #     - "8080:8080"
+  #   expose:
+  #     - "8080"
   # ------------------- web ----------------------
-  www:
-    container_name: www
-    build:
-      context: ./animanga_web
-      dockerfile: Dockerfile
-    restart: always    
-    command: node .output/server/index.mjs
-    env_file:
-      - ./.env
-    depends_on:
-      - api
-    volumes:
-      - www_data:/web
-    networks:
-      - api
-      - www
-    ports:
-      - "80:3000"
-    expose:
-      - "80"
+  # www:
+  #   container_name: www
+  #   build:
+  #     context: ./animanga_web
+  #     dockerfile: Dockerfile
+  #   restart: always    
+  #   command: node .output/server/index.mjs
+  #   env_file:
+  #     - ./.env
+  #   depends_on:
+  #     - api
+  #   volumes:
+  #     - www_data:/web
+  #   networks:
+  #     - api
+  #     - www
+  #   ports:
+  #     - "80:3000"
+  #   expose:
+  #     - "80"
 # ------------------- Netowrks ----------------------
 networks:
   db:
