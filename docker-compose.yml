@@ -4,7 +4,7 @@ services:
   # ------------------- surrealdb ----------------------
   surrealdb:
     container_name: surrealdb
-    image: surrealdb/surrealdb:v1.4.0
+    image: surrealdb/surrealdb:v1.5.3
     restart: always
     command: ["start", "--log", "trace", "--auth", "--user", "root", "--pass", "root", "file:/data", "--allow-all"]
     user: ":"

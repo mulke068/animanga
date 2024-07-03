@@ -1,3 +1,4 @@
+// ---------------------------------------------------------------REMOVING-------------------------------------------------------
 DELETE anime;
 REMOVE TABLE anime;
 DELETE manga;
@@ -18,7 +19,16 @@ REMOVE TABLE has_hach;
 
 REMOVE SCOPE account;
 REMOVE EVENT encrypt_password ON TABLE user;
+DELETE token;
+REMOVE TABLE token;
 
+REMOVE ANALYZER ascii;
+
+// ---------------------------------------------------------------SETUP-------------------------------------------------------
+
+DEFINE ANALYZER IF NOT EXISTS ascii TOKENIZERS class FILTERS ascii;
+
+// ---------------------------------------------------------------ANIME-------------------------------------------------------
 
 DEFINE TABLE anime SCHEMAFULL;
 DEFINE INDEX names ON TABLE anime COLUMNS names SEARCH ANALYZER ascii BM25 HIGHLIGHTS;
@@ -52,6 +62,7 @@ DEFINE FIELD image_urls.* ON TABLE anime TYPE string;
 DEFINE FIELD updated_at ON TABLE anime TYPE datetime DEFAULT time::now();
 DEFINE FIELD created_at ON TABLE anime TYPE datetime DEFAULT time::now();
 
+// ---------------------------------------------------------------MANGA-------------------------------------------------------
 
 DEFINE TABLE manga SCHEMAFULL;
 DEFINE INDEX names ON TABLE manga COLUMNS names SEARCH ANALYZER ascii BM25 HIGHLIGHTS;
@@ -83,6 +94,7 @@ DEFINE FIELD image_urls.* ON TABLE manga TYPE string;
 DEFINE FIELD updated_at ON TABLE manga TYPE datetime DEFAULT time::now();
 DEFINE FIELD created_at ON TABLE manga TYPE datetime DEFAULT time::now();
 
+// ---------------------------------------------------------------USER-------------------------------------------------------
 
 DEFINE TABLE user SCHEMAFULL
     PERMISSIONS
@@ -112,22 +124,23 @@ DEFINE FIELD permission.delete ON TABLE user TYPE bool DEFAULT false;
 DEFINE FIELD updated_at ON TABLE user TYPE datetime DEFAULT time::now();
 DEFINE FIELD created_at ON TABLE user TYPE datetime DEFAULT time::now();
 
-
--- DEFINE TABLE user_hach SCHEMAFULL
---     PERMISSIONS
---         FOR select WHERE id = $auth.id
---         FOR update, create , delete NONE;
-        
--- DEFINE INDEX username ON TABLE user_hach COLUMNS username UNIQUE;
--- DEFINE FIELD username ON TABLE user_hach TYPE string;
--- DEFINE FIELD password ON user_hach TYPE string;
-
--- DEFINE FIELD in ON TABLE has_hach TYPE record<user>;
--- DEFINE FIELD out ON TABLE has_hach TYPE record<user_hach>;
+// ---------------------------------------------------------------USER ENCRYPT-------------------------------------------------------
 
 DEFINE EVENT IF NOT EXISTS encrypt_password ON TABLE user WHEN $event = "CREATE" THEN {    
      UPDATE user SET password = crypto::argon2::generate($value.password);
- };
+};
+
+// ---------------------------------------------------------------USER TOKEN-------------------------------------------------------
+
+DEFINE TABLE token SCHEMAFULL;
+DEFINE INDEX out ON TABLE token COLUMNS out UNIQUE;
+# DEFINE FIELD in ON TABLE token TYPE record<token>;
+DEFINE FIELD out ON TABLE token TYPE record<user>;
+DEFINE FIELD token ON TABLE token TYPE string;
+DEFINE FIELD created_at ON TABLE token TYPE datetime DEFAULT time::now();
+
+// ---------------------------------------------------------------ACCOUNT-------------------------------------------------------
+
 
 DEFINE SCOPE account SESSION 10s
     SIGNIN {
@@ -149,6 +162,7 @@ DEFINE SCOPE account SESSION 10s
     }
 ;
 
+// ---------------------------------------------------------------USER ANIME-------------------------------------------------------
 
 DEFINE TABLE has_anime SCHEMAFULL;
 DEFINE INDEX out ON TABLE has_anime COLUMNS out UNIQUE;
@@ -162,8 +176,10 @@ DEFINE FIELD updated_at ON TABLE has_anime TYPE datetime DEFAULT time::now();
 DEFINE FIELD created_at ON TABLE has_anime TYPE datetime DEFAULT time::now();
 
 
-DEFINE TABLE has_anime SCHEMAFULL;
-DEFINE INDEX out ON TABLE has_anime COLUMNS out UNIQUE;
+// ---------------------------------------------------------------USER MANGA-------------------------------------------------------
+
+DEFINE TABLE has_manga SCHEMAFULL;
+DEFINE INDEX out ON TABLE has_manga COLUMNS out UNIQUE;
 
 DEFINE FIELD in ON TABLE has_manga TYPE record<user>;
 DEFINE FIELD out ON TABLE has_manga TYPE record<manga>;
