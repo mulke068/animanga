@@ -1,13 +1,24 @@
-version: "3.9"
+# version: "3.9"
 name: animanga
 services:
   # ------------------- surrealdb ----------------------
   surrealdb:
     container_name: surrealdb
-    image: surrealdb/surrealdb:v1.5.3
+    image: surrealdb/surrealdb:v2.3.6
     restart: always
-    command: ["start", "--log", "trace", "--auth", "--user", "root", "--pass", "root", "file:/data", "--allow-all"]
-    user: ":"
+    entrypoint:
+      - /surreal
+      - start
+      - --log
+      - "trace"
+      - --user
+      - "root"
+      - --pass
+      - "root"
+      - "--allow-all"
+      - "file:/data/current.db"
+    # command: ["start", "--log", "trace", "--auth", "--user", "root", "--pass", "root", "file:/data", "--allow-all"]
+    # user: ":"
     tty: true
     volumes:
       - surrealdb_data:/data
@@ -15,29 +26,6 @@ services:
       - db
     ports:
       - "8000:8000"
-  # ------------------- surrealdb Nightly ----------------------
-  # surrealdb_nightly:
-  #   container_name: surrealdb_nightly
-  #   image: surrealdb/surrealdb:nightly # Nightly
-  #   restart: always
-  #   entrypoint:
-  #     - /surreal
-  #     - start
-  #     - --log
-  #     - "trace"
-  #     - --user
-  #     - "root"
-  #     - --pass
-  #     - "root"
-  #     - "memory"
-  #     - "--allow-all"
-  #     # - "file:/data/nightly.db"
-  #   ports:
-  #     - "8888:8000"
-  #   volumes:
-  #     - surrealdb_data:/data
-    # networks:
-    # - db
   # ------------------- Meilisearch ----------------------
   # meilisearch:
   #   container_name: meilisearch
@@ -54,16 +42,16 @@ services:
   #   networks:
   #     - db
   # ------------------- Redis ----------------------
-  # redis:
-  #   container_name: redis
-  #   image: redis:latest
-  #   restart: always
-  #   volumes:
-  #     - redis_data:/data
-  #   networks:
-  #     - db
-  #   ports:
-  #     - "6379:6379"
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    volumes:
+      - redis_data:/data
+    networks:
+      - db
+    ports:
+      - "6379:6379"
   # ------------------- api ----------------------
   # api:
   #   container_name: api
@@ -106,7 +94,7 @@ services:
   #     - "80:3000"
   #   expose:
   #     - "80"
-# ------------------- Netowrks ----------------------
+# ------------------- Networks ----------------------
 networks:
   db:
     driver: bridge
